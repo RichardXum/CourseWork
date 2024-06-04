@@ -136,7 +136,7 @@ public class Movies implements IMovies{
     @Override
     public boolean remove(int id) {
         if (Id.get(id) != null) {
-            remove(id);
+            Id.remove(id);
             return true;
         }
         return false;
@@ -166,6 +166,8 @@ public class Movies implements IMovies{
     @Override
     public int[] getAllIDsReleasedInRange(LocalDate start, LocalDate end) {
         // TODO Implement this function
+        
+
         return null;
     }
 
@@ -563,7 +565,7 @@ public class Movies implements IMovies{
     @Override
     public boolean setIMDB(int filmID, String imdbID) {
         // TODO Implement this function
-        if (FilmID.get(filmID)!=null) {
+        if (FilmID.get(filmID) != null) {
             ImdbID.put(filmID, imdbID);
             return true;
         }
@@ -594,7 +596,7 @@ public class Movies implements IMovies{
     public boolean setPopularity(int id, double popularity) {
         // TODO Implement this function
         if (Id.get(id)==null) {
-            Popularity.put(id, popularity);
+            return false;
         }else{
             Popularity.remove(id);
             Popularity.put(id, popularity);
@@ -613,7 +615,11 @@ public class Movies implements IMovies{
     public double getPopularity(int id) {
         // TODO Implement this function
         if (Id.get(id)!=null) {
-            return Popularity.get(id);
+            if(Popularity.get(id) == null){
+                return 0.0;
+            }else{
+                return Popularity.get(id);
+            }
         }
         return -1.0;
     }

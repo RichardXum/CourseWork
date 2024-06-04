@@ -1,6 +1,7 @@
 package structures;
 
 import stores.Company;
+import utils.LoadData;
 
 public class HashTable<K, V> {
     private Entry<K, V>[] table;
@@ -54,6 +55,7 @@ public class HashTable<K, V> {
                 }
                 prev = current;
                 current = current.next;
+                return;
             }
         }
     }
@@ -105,7 +107,7 @@ public class HashTable<K, V> {
     }
 
     public int[] traverseI(){
-        int[] traverse = new int[1000];
+        int[] traverse = new int[size];
         int index = 0;
         for (int i = 0; i < table.length; i++) {
             if(table[i] != null){
@@ -113,12 +115,11 @@ public class HashTable<K, V> {
                 index++;
             }
         }
-
         return traverse;
     }
 
     public Company[] traverseCp(){
-        Company[] traverse = new Company[1000];
+        Company[] traverse = new Company[size];
         int index = 0;
         for (int i = 0; i < table.length; i++) {
             if(table[i] != null){
@@ -131,7 +132,7 @@ public class HashTable<K, V> {
     }
 
     public String[] traverseS(){
-        String[] traverse = new String[1000];
+        String[] traverse = new String[size];
         int index = 0;
         for (int i = 0; i < table.length; i++) {
             if(table[i] != null){
@@ -139,9 +140,10 @@ public class HashTable<K, V> {
                 index++;
             }
         }
-
+        
         return traverse;
     }
+
 
     public static class Entry<K, V> {
         K key;
