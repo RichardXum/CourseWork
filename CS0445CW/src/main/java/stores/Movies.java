@@ -149,10 +149,7 @@ public class Movies implements IMovies{
      */
     @Override
     public int[] getAllIDs() {
-        int[] AllIds = new int[1000];
-        for (int i = 0; i < Id.size(); i++) {
-            
-        }
+        int[] AllIds = Id.traverseI();
         // TODO Implement this function
         return AllIds;
     }
@@ -496,8 +493,8 @@ public class Movies implements IMovies{
     @Override
     public int[] getFilmsInCollection(int collectionID) {
         // TODO Implement this function
-        int[] array_1 = new int[1000];
-
+        int[] array_1 = CollectionID.traverseI();
+        
         return array_1;
     }
 
@@ -667,7 +664,8 @@ public class Movies implements IMovies{
     @Override
     public Company[] getProductionCompanies(int id) {
         // TODO Implement this function
-        return null;
+        Company[] company = Company.traverseCp();
+        return company;
     }
 
     /**
@@ -681,7 +679,8 @@ public class Movies implements IMovies{
     @Override
     public String[] getProductionCountries(int id) {
         // TODO Implement this function
-        return null;
+        String[] country = Country.traverseS();
+        return country;
     }
 
     /**

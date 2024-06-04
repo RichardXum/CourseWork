@@ -1,5 +1,7 @@
 package structures;
 
+import stores.Company;
+
 public class HashTable<K, V> {
     private Entry<K, V>[] table;
     private int capacity;
@@ -102,6 +104,44 @@ public class HashTable<K, V> {
         return size;
     }
 
+    public int[] traverseI(){
+        int[] traverse = new int[1000];
+        int index = 0;
+        for (int i = 0; i < table.length; i++) {
+            if(table[i] != null){
+                traverse[index] = (int) table[i].value;
+                index++;
+            }
+        }
+
+        return traverse;
+    }
+
+    public Company[] traverseCp(){
+        Company[] traverse = new Company[1000];
+        int index = 0;
+        for (int i = 0; i < table.length; i++) {
+            if(table[i] != null){
+                traverse[index] = (Company) table[i].value;
+                index++;
+            }
+        }
+
+        return traverse;
+    }
+
+    public String[] traverseS(){
+        String[] traverse = new String[1000];
+        int index = 0;
+        for (int i = 0; i < table.length; i++) {
+            if(table[i] != null){
+                traverse[index] = (String) table[i].value;
+                index++;
+            }
+        }
+
+        return traverse;
+    }
 
     public static class Entry<K, V> {
         K key;
