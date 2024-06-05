@@ -14,17 +14,10 @@ public class Ratings implements IRatings {
      * @param stores An object storing all the different key stores,
      *               including itself
      */
-    HashTable<Integer, Integer> UserId;
-    HashTable<Integer, Integer> MovieId;
-    HashTable<Integer, Float> Rating;
-    HashTable<Integer, LocalDateTime> Timestamp;
-
+    
     public Ratings(Stores stores) {
         this.stores = stores;
-        UserId = new HashTable<>(1000);
-        MovieId = new HashTable<>(1000);
-        Rating = new HashTable<>(1000);
-        Timestamp = new HashTable<>(1000);
+        
         // TODO Add initialisation of data structure here
     }
 
@@ -41,15 +34,7 @@ public class Ratings implements IRatings {
      */
     @Override
     public boolean add(int userid, int movieid, float rating, LocalDateTime timestamp) {
-        if (UserId.get(userid) != null) {
-            return false;
-        }else{
-            UserId.put(userid, userid);
-            MovieId.put(userid, movieid);
-            Rating.put(userid, rating);
-            Timestamp.put(userid, timestamp);
-            return true;
-        }
+        return false;
         // TODO Implement this function
     }
 
@@ -64,13 +49,6 @@ public class Ratings implements IRatings {
     @Override
     public boolean remove(int userid, int movieid) {
         // TODO Implement this function
-        if (UserId.get(userid)!=null) {
-            UserId.remove(userid);
-            MovieId.remove(userid);
-            Rating.remove(userid);
-            Timestamp.remove(userid);
-            return true;
-        }
         return false;
     }
 
@@ -90,6 +68,7 @@ public class Ratings implements IRatings {
     @Override
     public boolean set(int userid, int movieid, float rating, LocalDateTime timestamp) {
         // TODO Implement this function
+
         return false;
     }
 
@@ -103,9 +82,9 @@ public class Ratings implements IRatings {
     @Override
     public float[] getMovieRatings(int movieid) {
         // TODO Implement this function
+        
         return null;
     }
-
     /**
      * Get all the ratings for a given user
      * 
@@ -116,7 +95,9 @@ public class Ratings implements IRatings {
     @Override
     public float[] getUserRatings(int userid) {
         // TODO Implement this function
+        
         return null;
+    
     }
 
     /**
@@ -198,6 +179,8 @@ public class Ratings implements IRatings {
     @Override
     public int getNumRatings(int movieid) {
         // TODO Implement this function
+        int num = 0;
+        
         return -1;
     }
 

@@ -50,6 +50,15 @@ public class Credits implements ICredits{
             Cast.put(id, cast);
             Crew.put(id, crew);
             Id.put(id, id);
+
+            for(int i = 0; i < cast.length; i++) {
+                CastID.put(id, cast[i].getID());
+            }
+
+            for(int i = 0; i < crew.length; i++) {
+                CrewID.put(id, crew[i].getID());
+            }
+
             return true;
         }
     }
@@ -126,7 +135,9 @@ public class Credits implements ICredits{
     public int sizeOfCast(int filmID) {
         // TODO Implement this function
         if (Id.get(filmID) != null) {
-            return Cast.size();
+            // XCG: return Cast.size();
+            CastCredit[] cast = Cast.get(filmID);
+            return cast.length;
         }
         return -1;
     }
@@ -142,7 +153,10 @@ public class Credits implements ICredits{
     public int sizeofCrew(int filmID) {
         // TODO Implement this function
         if (Id.get(filmID) != null) {
-            return Crew.size();
+            // XCG: return Crew.size();
+            CrewCredit[] crew = Crew.get(filmID);
+            return crew.length;
+
         }
         return -1;
     }
@@ -395,6 +409,27 @@ public class Credits implements ICredits{
     public int[] getCastFilms(int castID){
         // TODO Implement this function
 
+        int[] films = Id.traverseI();
+        int[] ret = new int[Id.size()];
+
+        int count = 0;
+        for(int i = 0; i < films.length; i++) {
+            if(CastID.get(films[i]) == castID) {
+                count++;
+                ret[i] = films[i];
+            }
+        }
+
+        int j = 0;
+        int[] ret_films = new int[count];
+        for(int i = 0; i < ret.length; i++) {
+            if(ret[i] != 0)
+                ret_films[j++] = ret[i];
+        }
+
+        return ret_films;
+
+        /*
         Person[] Casts = getUniqueCast();
 
         String path = "";
@@ -415,8 +450,8 @@ public class Credits implements ICredits{
         for (int i = 0; i < ids.length; i++) {
             CastCredit[] case_1 = getFilmCast(ids[i]);
             for (int j = 0; j < case_1.length; j++) {
-                if(case_1[i].getProfilePath() == path){
-                    AllCasts[len++] = case_1[i].getID();
+                if(case_1[j].getProfilePath() == path){
+                    AllCasts[len++] = case_1[j].getID();
             }
         }
     }
@@ -427,6 +462,7 @@ public class Credits implements ICredits{
         }
 
         return fmids;
+        */
     }
 
     /**
@@ -440,38 +476,25 @@ public class Credits implements ICredits{
     @Override
     public int[] getCrewFilms(int crewID) {
         // TODO Implement this function
-        Person[] Crews = getUniqueCrew();
+        int[] films = Id.traverseI();
+        int[] ret = new int[Id.size()];
 
-        String path = "";
-        for (int i = 0; i < Crews.length; i++) {
-            if (Crews[i].getID() == crewID) {
-                path = Crews[i].getProfilePath();
+        int count = 0;
+        for(int i = 0; i < films.length; i++) {
+            if(CrewID.get(films[i]) == crewID) {
+                count++;
+                ret[i] = films[i];
             }
         }
 
-        if (path == "") {
-            return new int[0];
+        int j = 0;
+        int[] ret_films = new int[count];
+        for(int i = 0; i < ret.length; i++) {
+            if(ret[i] != 0)
+                ret_films[j++] = ret[i];
         }
 
-        int[] AllCrews = new int[1000];
-        int[] ids = Id.traverseI();
-        
-        int len = 0;
-        for (int i = 0; i < ids.length; i++) {
-            CrewCredit[] case_1 = getFilmCrew(ids[i]);
-            for (int j = 0; j < case_1.length; j++) {
-                if(case_1[i].getProfilePath() == path){
-                    AllCrews[len++] = case_1[i].getID();
-            }
-        }
-    }
-
-        int[] fmids = new int[len];
-        for (int j = 0; j < len; j++) {
-            fmids[j] = AllCrews[j];
-        }
-
-        return fmids;
+        return ret_films;
     }
 
     /**
