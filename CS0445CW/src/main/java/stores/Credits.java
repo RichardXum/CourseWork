@@ -167,40 +167,45 @@ public class Credits implements ICredits{
     @Override
     public Person[] getUniqueCast() {
         // TODO Implement this function
-        int[] ids = Id.traverseI();
+    int[] ids = Id.traverseI();
 
-        Person[] list = new Person[1000];
-        int len = 0;
-        for (int i = 0; i < ids.length; i++) {
-            CastCredit[] case_1 = Cast.get(ids[i]);
-            for (int j = 0; j < case_1.length; j++) {
-                 String name = case_1[j].getName();
-                 int id = case_1[j].getID();
-                 String path = case_1[j].getProfilePath();
-                 list[len++] = new Person(id, name, path);
+    Person[] list = new Person[1000];
+    int len = 0;
+
+    for (int i = 0; i < ids.length; i++) {
+        CastCredit[] cast = Cast.get(ids[i]);
+        
+        for (int j = 0; j < cast.length; j++) {
+            String name = cast[j].getName();
+            int id = cast[j].getID();
+            String path = cast[j].getProfilePath();
+            
+            list[len++] = new Person(id, name, path);
+        }
+    }
+    
+    Person[] uniqueList = new Person[1000];
+    int uniqueLen = 0;
+
+    for(int i = 0; i < len; i++){
+        boolean isUnique = true;
+
+        for (int j = 0; j < uniqueLen; j++) {
+            if (list[i].getName().equals(uniqueList[j].getName())) {
+                isUnique = false;
+                break;
             }
         }
         
-        int len_ret = 0;
-        Person[] final_list = new Person[1000];
-        for(int i = 0;i<len;i++){
-            int sig = 0;
-            for (int j = 0; j < len; j++) {
-                if (list[i].getName() == list[j].getName()) {
-                    sig = 1;
-                }
-            }
-            if (sig == 0) {
-                final_list[len_ret++] = list[i];
-            }
+        if (isUnique) {
+            uniqueList[uniqueLen++] = list[i];
         }
+    }
 
-        Person[] ret = new Person[len];
-        for (int i = 0; i < len_ret; i++) {
-            ret[i] = final_list[i];
-        }
-        
-        return ret;
+    Person[] finalList = new Person[uniqueLen];
+    System.arraycopy(uniqueList, 0, finalList, 0, uniqueLen);
+
+    return finalList;
     }
 
     /**
@@ -215,38 +220,43 @@ public class Credits implements ICredits{
 
         int[] ids = Id.traverseI();
 
-        Person[] list = new Person[1000];
-        int len = 0;
-        for (int i = 0; i < ids.length; i++) {
-            CrewCredit[] case_1 = Crew.get(ids[i]);
-            for (int j = 0; j < case_1.length; j++) {
-                 String name = case_1[j].getName();
-                 int id = case_1[j].getID();
-                 String path = case_1[j].getProfilePath();
-                 list[len++] = new Person(id, name, path);
-            }
-        }
-        
-        int len_ret = 0;
-        Person[] final_list = new Person[1000];
-        for(int i = 0;i<len;i++){
-            int sig = 0;
-            for (int j = 0; j < len; j++) {
-                if (list[i].getName() == list[j].getName()) {
-                    sig = 1;
-                }
-            }
-            if (sig == 0) {
-                final_list[len_ret++] = list[i];
-            }
-        }
+    Person[] list = new Person[1000];
+    int len = 0;
 
-        Person[] ret = new Person[len];
-        for (int i = 0; i < len_ret; i++) {
-            ret[i] = final_list[i];
+    for (int i = 0; i < ids.length; i++) {
+        CrewCredit[] crew = Crew.get(ids[i]);
+        
+        for (int j = 0; j < crew.length; j++) {
+            String name = crew[j].getName();
+            int id = crew[j].getID();
+            String path = crew[j].getProfilePath();
+            
+            list[len++] = new Person(id, name, path);
+        }
+    }
+    
+    Person[] uniqueList = new Person[1000];
+    int uniqueLen = 0;
+
+    for(int i = 0; i < len; i++){
+        boolean isUnique = true;
+
+        for (int j = 0; j < uniqueLen; j++) {
+            if (list[i].getName().equals(uniqueList[j].getName())) {
+                isUnique = false;
+                break;
+            }
         }
         
-        return ret;
+        if (isUnique) {
+            uniqueList[uniqueLen++] = list[i];
+        }
+    }
+
+    Person[] finalList = new Person[uniqueLen];
+    System.arraycopy(uniqueList, 0, finalList, 0, uniqueLen);
+
+    return finalList;
     }
 
     /**
