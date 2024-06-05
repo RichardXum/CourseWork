@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import interfaces.IMovies;
 import structures.*;
+import structures.HashTable.Entry;
 
 public class Movies implements IMovies{
     Stores stores;
@@ -27,6 +28,7 @@ public class Movies implements IMovies{
     HashTable<Integer, Double> VoteAverage;
     HashTable<Integer, Integer> VoteCount;
     HashTable<Integer, Integer> FilmID;
+    HashTable<Integer, Integer> FilmID_1;
     HashTable<Integer, Integer> CollectionID;
     HashTable<Integer, String> CollectionName;
     HashTable<Integer, String> CollectionBackdropPath;
@@ -63,6 +65,7 @@ public class Movies implements IMovies{
         VoteAverage = new HashTable<>(1000);
         VoteCount = new HashTable<>(1000);
         FilmID = new HashTable<>(1000);
+        FilmID_1 = new HashTable<>(1000);
         CollectionBackdropPath = new HashTable<>(1000);
         CollectionID = new HashTable<>(1000);
         CollectionName = new HashTable<>(1000);
@@ -137,6 +140,22 @@ public class Movies implements IMovies{
     public boolean remove(int id) {
         if (Id.get(id) != null) {
             Id.remove(id);
+            Title.remove(id);
+            OriginalTitle.remove(id);;
+            Overview.remove(id);;
+            Tagline.remove(id);;
+            Status.remove(id);;
+            Genres.remove(id);;
+            Release.remove(id);;
+            Budget.remove(id);;
+            Revenue.remove(id);;
+            Languages.remove(id);;
+            OriginalLanguage.remove(id);;
+            Runtime.remove(id);;
+            Homepage.remove(id);;
+            Adult.remove(id);;
+            Video.remove(id);;
+            Poster.remove(id);;
             return true;
         }
         return false;
@@ -167,8 +186,28 @@ public class Movies implements IMovies{
     public int[] getAllIDsReleasedInRange(LocalDate start, LocalDate end) {
         // TODO Implement this function
         
-
-        return null;
+        int[] Ids = getAllIDs();
+        int[] films = new int[Ids.length];
+        
+        for(int i = 0; i < Ids.length; i++) {
+            if(getRelease(Ids[i]).isAfter(start) && getRelease(Ids[i]).isBefore(end))
+                films[i] = Ids[i];
+        }
+        
+        int len_ret = 0;
+        for(int i = 0; i < films.length; i++) {
+            if(films[i] != 0)
+            len_ret++;
+        }
+        
+        int j = 0;
+        int[] ret = new int[len_ret];
+        for(int i = 0; i < films.length; i++) {
+            if(films[i] != 0)
+            ret[j++] = films[i];
+        }
+        
+        return ret;
     }
 
     /**
@@ -474,7 +513,8 @@ public class Movies implements IMovies{
         // TODO Implement this function
         if (Id.get(filmID) != null) {
             FilmID.put(filmID, collectionID);
-            CollectionID.put(collectionID, filmID);
+            FilmID_1.put(collectionID, filmID);
+            CollectionID.put(collectionID, collectionID);
             CollectionName.put(collectionID, collectionName);
             CollectionBackdropPath.put(collectionID, collectionBackdropPath);
             CollectionPosterPath.put(collectionID, collectionPosterPath);
@@ -495,9 +535,25 @@ public class Movies implements IMovies{
     @Override
     public int[] getFilmsInCollection(int collectionID) {
         // TODO Implement this function
-        int[] array_1 = CollectionID.traverseI();
+        int len_ret = 0;
+
+        int[] res = new int[size()];
+        Entry<Integer, Integer> entry = CollectionID.table[collectionID];
+            while (entry != null) {
+                res[len_ret++] = FilmID_1.get(entry.value);
+                entry = entry.next;
+            }
+
+        int[] ret = new int[len_ret];
+        if (len_ret == 0) {
+            int[] non = new int[0];
+            return non;
+        }
+        for(int i = 0; i < len_ret; i++) {
+            ret[i] = res[i];
+        }
         
-        return array_1;
+        return ret;
     }
 
     /**
@@ -565,7 +621,7 @@ public class Movies implements IMovies{
     @Override
     public boolean setIMDB(int filmID, String imdbID) {
         // TODO Implement this function
-        if (FilmID.get(filmID) != null) {
+        if (Id.get(filmID) != null && ImdbID.get(filmID) == null) {
             ImdbID.put(filmID, imdbID);
             return true;
         }
@@ -635,7 +691,7 @@ public class Movies implements IMovies{
     @Override
     public boolean addProductionCompany(int id, Company company) {
         // TODO Implement this function
-        if (Id.get(id)!=null) {
+        if (Id.get(id) != null) {
             Company.put(id, company);
             return true;
         }
@@ -670,8 +726,29 @@ public class Movies implements IMovies{
     @Override
     public Company[] getProductionCompanies(int id) {
         // TODO Implement this function
-        Company[] company = Company.traverseCp();
-        return company;
+        if (Id.get(id) == null) {
+            return null;
+        }
+
+        int len_ret = 0;
+
+        Company[] res = new Company[size()];
+        Entry<Integer, Company> entry = Company.table[id];
+            while (entry != null) {
+                res[len_ret++] = entry.value;
+                entry = entry.next;
+                
+            }
+
+        Company[] ret = new Company[len_ret];
+        if (len_ret == 0) {
+            return null;
+        }
+        for(int i = 0; i < len_ret; i++) {
+            ret[i] = res[i];
+        }
+        
+        return ret;
     }
 
     /**
@@ -685,8 +762,29 @@ public class Movies implements IMovies{
     @Override
     public String[] getProductionCountries(int id) {
         // TODO Implement this function
-        String[] country = Country.traverseS();
-        return country;
+        if (Id.get(id) == null) {
+            return null;
+        }
+
+        int len_ret = 0;
+
+        String[] res = new String[size()];
+        Entry<Integer, String> entry = Country.table[id];
+            while (entry != null) {
+                res[len_ret++] = entry.value;
+                entry = entry.next;
+            }
+
+        String[] ret = new String[len_ret];
+        if (len_ret == 0) {
+            return null;
+        }
+        for(int i = 0; i < len_ret; i++) {
+            ret[i] = res[i];
+        }
+        
+        return ret;
+    
     }
 
     /**
@@ -712,6 +810,23 @@ public class Movies implements IMovies{
     @Override
     public int[] findFilms(String searchTerm) {
         // TODO Implement this function
-        return null;
+        int[] Ids = getAllIDs();
+        int[] films = new int[Ids.length];
+        int len_ret = 0;
+
+        for(int i = 0; i < Ids.length; i++) {
+            if(Title.get(Ids[i]).contains(searchTerm)){
+                films[i] = Ids[i];
+                len_ret++;
+        }
+    }
+        int j = 0;
+        int[] ret = new int[len_ret];
+        for(int i = 0; i < films.length; i++) {
+            if(films[i] != 0)
+            ret[j++] = films[i];
+        }
+        
+        return ret;
     }
 }

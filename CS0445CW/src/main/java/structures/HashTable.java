@@ -1,10 +1,11 @@
 package structures;
 
+import stores.CastCredit;
 import stores.Company;
 import utils.LoadData;
 
 public class HashTable<K, V> {
-    private Entry<K, V>[] table;
+    public Entry<K, V>[] table;
     private int capacity;
     private int size;
     private static final double LOAD_FACTOR_THRESHOLD = 0.7;
@@ -22,12 +23,10 @@ public class HashTable<K, V> {
             while (entry.next != null && !entry.key.equals(key)) {
                 entry = entry.next;
             }
-            if (entry.key.equals(key)) {
-                entry.value = value;
-            } else {
-                entry.next = new Entry<>(key, value);
-                size++;
-            }
+            
+            entry.next = new Entry<>(key, value);
+            size++;
+            
         } else {
             table[index] = new Entry<>(key, value);
             size++;
@@ -37,7 +36,7 @@ public class HashTable<K, V> {
             rehash();
         }
     }
-
+    
     public void remove(K key) {
         int index = hash(key);
         if (table[index] != null) {
@@ -107,48 +106,25 @@ public class HashTable<K, V> {
     }
 
     public int[] traverseI(){
-        int[] traverse = new int[size];
+        int[] traverse = new int[size()];
         int index = 0;
         for (int i = 0; i < table.length; i++) {
             if(table[i] != null){
                 traverse[index] = (int) table[i].value;
                 index++;
             }
-        }
-        return traverse;
-    }
-
-    public Company[] traverseCp(){
-        Company[] traverse = new Company[size];
-        int index = 0;
-        for (int i = 0; i < table.length; i++) {
-            if(table[i] != null){
-                traverse[index] = (Company) table[i].value;
-                index++;
+            if (index == size()) {
+                break;
             }
         }
-
-        return traverse;
-    }
-
-    public String[] traverseS(){
-        String[] traverse = new String[size];
-        int index = 0;
-        for (int i = 0; i < table.length; i++) {
-            if(table[i] != null){
-                traverse[index] = (String) table[i].value;
-                index++;
-            }
-        }
-        
         return traverse;
     }
 
 
     public static class Entry<K, V> {
-        K key;
-        V value;
-        Entry<K, V> next;
+        public K key;
+        public V value;
+        public Entry<K, V> next;
 
         Entry(K key, V value) {
             this.key = key;
