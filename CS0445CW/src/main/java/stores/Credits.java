@@ -1,4 +1,5 @@
 package stores;
+import java.util.Arrays;
 
 import structures.*;
 import interfaces.ICredits;
@@ -51,14 +52,8 @@ public class Credits implements ICredits{
             Crew.put(id, crew);
             Id.put(id, id);
 
-            for(int i = 0; i < cast.length; i++) {
-                CastID.put(id, cast[i].getID());
-            }
-
-            for(int i = 0; i < crew.length; i++) {
-                CrewID.put(id, crew[i].getID());
-            }
-
+            for(int i = 0; i < cast.length; i++)
+                CastID.put(cast[i].getID(), cast[i].getID());
             return true;
         }
     }
@@ -414,9 +409,12 @@ public class Credits implements ICredits{
 
         int count = 0;
         for(int i = 0; i < films.length; i++) {
-            if(CastID.get(films[i]) == castID) {
-                count++;
-                ret[i] = films[i];
+            CastCredit[] tempCast = Cast.get(films[i]);
+            for(int j = 0; j < tempCast.length; j++) {
+                if(tempCast[j].getID() == castID) {
+                    count++;
+                    ret[i] = films[i];
+                }
             }
         }
 
@@ -476,14 +474,52 @@ public class Credits implements ICredits{
     @Override
     public int[] getCrewFilms(int crewID) {
         // TODO Implement this function
+        /*
+        Person[] Crews = getUniqueCrew();
+
+        String path = "";
+        for (int i = 0; i < Crews.length; i++) {
+            if (Crews[i].getID() == crewID) {
+                path = Crews[i].getProfilePath();
+            }
+        }
+
+        if (path == "") {
+            return new int[0];
+        }
+
+        int[] AllCrews = new int[1000];
+        int[] ids = Id.traverseI();
+        
+        int len = 0;
+        for (int i = 0; i < ids.length; i++) {
+            CrewCredit[] case_1 = getFilmCrew(ids[i]);
+            for (int j = 0; j < case_1.length; j++) {
+                if(case_1[i].getProfilePath() == path){
+                    AllCrews[len++] = case_1[i].getID();
+            }
+        }
+    }
+
+        int[] fmids = new int[len];
+        for (int j = 0; j < len; j++) {
+            fmids[j] = AllCrews[j];
+        }
+
+        return fmids;
+        */
+
         int[] films = Id.traverseI();
         int[] ret = new int[Id.size()];
 
         int count = 0;
         for(int i = 0; i < films.length; i++) {
-            if(CrewID.get(films[i]) == crewID) {
-                count++;
-                ret[i] = films[i];
+            CrewCredit[] tempCrew = Crew.get(films[i]);
+            for(int j = 0; j < tempCrew.length; j++) {
+                if(tempCrew[j].getID() == crewID) {
+                    count++;
+                    ret[i] = films[i];
+                }
             }
         }
 
@@ -510,6 +546,7 @@ public class Credits implements ICredits{
     @Override
     public int[] getCastStarsInFilms(int castID){
         // TODO Implement this function
+        /*
         int[] fmids = getCastFilms(castID);
 
         int[] exist = new int[1000];
@@ -519,6 +556,29 @@ public class Credits implements ICredits{
         }
 
         return null;
+        */
+        int[] films = Id.traverseI();
+        int[] ret = new int[Id.size()];
+
+        int count = 0;
+        for(int i = 0; i < films.length; i++) {
+            CastCredit[] tempCast = Cast.get(films[i]);
+            for(int j = 0; j < tempCast.length; j++) {
+                if(tempCast[j].getID() == castID) {
+                    count++;
+                    ret[i] = films[i];
+                }
+            }
+        }
+
+        int j = 0;
+        int[] ret_films = new int[count];
+        for(int i = 0; i < ret.length; i++) {
+            if(ret[i] != 0)
+                ret_films[j++] = ret[i];
+        }
+
+        return ret_films;
     }
     
     /**
@@ -537,7 +597,36 @@ public class Credits implements ICredits{
     @Override
     public Person[] getMostCastCredits(int numResults) {
         // TODO Implement this function
-        return null;
+        int[] films = Id.traverseI();
+        int[] cast_ids = CastID.traverseI();
+    
+        int[] cast_credits = new int[cast_ids.length];
+    
+        if(films.length == 0)
+            return new Person[0];
+
+        for(int i = 0; i < films.length; i++) {
+            CastCredit[] tempCast = Cast.get(films[i]);
+            for(int j = 0; j < cast_ids.length; j++) {
+                for(int k = 0; k < tempCast.length; k++) {
+                    if(tempCast[k].getID() == cast_ids[j])
+                        cast_credits[j]++;
+                }
+            }
+        }
+
+        Person[] person = new Person[numResults];
+        for(int j = 0; j < numResults; j++) {
+            for(int i = 0; i < films.length; i++) {
+                CastCredit[] tempCast = Cast.get(films[i]);
+                for(int k = 0; k < tempCast.length; k++) {
+                    if(tempCast[k].getID() == cast_ids[j])
+                        person[j] = new Person(cast_ids[j], tempCast[k].getName(), tempCast[k].getProfilePath());
+                }
+            }
+        }
+
+        return person;
     }
 
     /**
@@ -553,7 +642,21 @@ public class Credits implements ICredits{
     @Override
     public int getNumCastCredits(int castID) {
         // TODO Implement this function
-        return -1;
+        int[] films = Id.traverseI();
+
+        int count = 0;
+        for(int i = 0; i < films.length; i++) {
+            CastCredit[] tempCast = Cast.get(films[i]);
+            for(int j = 0; j < tempCast.length; j++) {
+                if(tempCast[j].getID() == castID)
+                    count++;
+            }
+        }
+
+        if(count == 0)
+            count = -1;
+    
+        return count;
     }
 
 }

@@ -103,5 +103,7 @@ public class ArrayList<E> implements IList<E> {
         ret.setCharAt(ret.length()-1, ']');
         return ret.toString();
     }
+
+    
     
 }

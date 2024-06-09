@@ -2,15 +2,12 @@ package structures;
 
 import stores.CastCredit;
 import stores.Company;
-import stores.Person;
 import utils.LoadData;
 
 public class HashTable<K, V> {
     public Entry<K, V>[] table;
     private int capacity;
     private int size;
-    private int keys[];
-    private V values[];
     private static final double LOAD_FACTOR_THRESHOLD = 0.7;
 
     public HashTable(int capacity) {
@@ -27,9 +24,10 @@ public class HashTable<K, V> {
                 entry = entry.next;
             }
             
-            entry.next = new Entry<>(key, value);
-            size++;
-            
+            if(entry.next == null) {
+                entry.next = new Entry<>(key, value);
+                size++;
+            }
         } else {
             table[index] = new Entry<>(key, value);
             size++;
@@ -106,15 +104,6 @@ public class HashTable<K, V> {
 
     public int size() {
         return size;
-    }
-
-    public int getKey(V value) {
-        for (int i = 0; i < size(); i++) {
-            if (values[i] != null && values[i].equals(value)) {
-                return keys[i];
-            }
-        }
-        return 0;
     }
 
     public int[] traverseI(){
